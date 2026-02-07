@@ -10,12 +10,7 @@ import XCTest
 final class AnchorUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {
@@ -23,12 +18,57 @@ final class AnchorUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testAppLaunches() throws {
+        // Test that the app launches successfully
         let app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        // Verify home screen elements are present
+        XCTAssertTrue(app.staticTexts["Welcome to Anchor"].exists)
+        XCTAssertTrue(app.staticTexts["Your private emotional support companion"].exists)
+    }
+    
+    @MainActor
+    func testStartConversationButton() throws {
+        // Test that start conversation button exists and is tappable
+        let app = XCUIApplication()
+        app.launch()
+        
+        let startButton = app.buttons["Start Conversation"]
+        XCTAssertTrue(startButton.exists)
+        XCTAssertTrue(startButton.isEnabled)
+    }
+    
+    @MainActor
+    func testNavigationToSettings() throws {
+        // Test navigation to settings
+        let app = XCUIApplication()
+        app.launch()
+        
+        // Look for settings button in navigation bar
+        let settingsButton = app.buttons.matching(identifier: "gearshape").firstMatch
+        if settingsButton.exists {
+            settingsButton.tap()
+            
+            // Verify settings view opened
+            XCTAssertTrue(app.navigationBars["Settings"].exists || app.staticTexts["Settings"].exists)
+        }
+    }
+    
+    @MainActor
+    func testNavigationToHistory() throws {
+        // Test navigation to history
+        let app = XCUIApplication()
+        app.launch()
+        
+        // Look for history button in navigation bar
+        let historyButton = app.buttons.matching(identifier: "clock.arrow.circlepath").firstMatch
+        if historyButton.exists {
+            historyButton.tap()
+            
+            // Verify history view opened
+            XCTAssertTrue(app.navigationBars["History"].exists || app.staticTexts["No sessions yet"].exists)
+        }
     }
 
     @MainActor
