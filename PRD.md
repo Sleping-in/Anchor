@@ -1,8 +1,8 @@
 # Product Requirements Document (PRD)
 # Anchor - AI-Powered Emotional Support App
 
-**Version:** 1.0  
-**Last Updated:** February 7, 2026  
+**Version:** 1.1  
+**Last Updated:** February 8, 2026  
 **Document Owner:** Product Team  
 **Status:** Active Development
 
@@ -13,20 +13,48 @@
 ### 1.1 Product Overview
 Anchor is a mobile application that provides AI-powered emotional support through voice-based conversations. The app is designed to help adults with mild-to-moderate mental health challenges by offering immediate, accessible, and judgment-free emotional support whenever they need it.
 
-### 1.2 Vision Statement
+### 1.2 The Problem
+The global mental health market is projected to reach $280B by 2030, yet a significant therapy gap persists: only 47% of U.S. adults with mental illness receive treatment. Four critical barriers prevent people from getting help:
+
+1. **Cost:** Average therapy session costs $150–$250; insurance coverage is inconsistent
+2. **Access:** Rural and underserved areas face severe therapist shortages
+3. **Stigma:** Many avoid seeking help due to social stigma around mental health
+4. **Availability:** Traditional therapy operates on limited schedules; crises don't wait for office hours
+
+Anchor addresses all four barriers by providing an affordable, always-available, private, voice-first emotional support companion.
+
+### 1.3 Vision Statement
 To create a safe, private, and accessible emotional support companion that empowers individuals to navigate their emotional challenges with confidence and care.
 
-### 1.3 Target Audience
+### 1.4 Target Audience
 - **Primary Users:** Adults (18+) experiencing mild-to-moderate mental health challenges
 - **Secondary Users:** Individuals seeking emotional support during stressful life events
 - **Geographic Focus:** Global, with initial launch in English-speaking markets
 
-### 1.4 Key Success Metrics
+### 1.5 Key Success Metrics
 - User retention rate (30-day, 90-day)
 - Session completion rate
 - User satisfaction score (NPS)
 - Crisis prevention effectiveness
 - Privacy compliance adherence
+
+### 1.6 Competitive Landscape
+
+| App | Approach | Strengths | Weaknesses | Anchor's Advantage |
+|-----|----------|-----------|------------|--------------------|
+| **Wysa** | CBT chatbot (text) | Evidence-based, affordable | Text-only, scripted feel | Voice-first, natural conversation |
+| **Woebot** | CBT chatbot (text) | Clinical validation, structured programs | Rigid flows, no voice | Freeform voice, adapts to user |
+| **Youper** | Mood tracking + CBT chat | Data-driven insights | Limited conversational depth | Deep voice conversations, learned profile |
+| **Noah** | AI therapy companion | Conversational tone | New, limited track record | Mature crisis protocol, privacy-first |
+| **Sonia** | AI therapist (voice) | Voice interaction | Cloud-stored data, subscription-heavy | 100% local storage, no cloud sync |
+| **Bestie** | AI friend (chat) | Casual, approachable | Shallow support, gamified | Clinically-informed, no gamification |
+
+**Anchor's Key Differentiators:**
+1. **Voice-native:** Real-time voice conversation via Gemini Live API — not text-to-speech over a chatbot
+2. **Complete privacy:** All data stored locally on-device with SwiftData encryption; conversations never leave the device
+3. **Cumulative learning:** AI builds a persistent user profile across sessions (recurring topics, triggers, coping strategies, emotional patterns) without cloud sync
+4. **No manipulation:** No gamification, no social features, no streaks-for-retention — just genuine support
+5. **Crisis-aware:** Real-time crisis detection with immediate 988 Lifeline integration and localized emergency resources
 
 ---
 
@@ -240,14 +268,19 @@ Home
 - **Android:** (Future consideration)
 
 ### 6.2 Technology Stack
-- **UI Framework:** SwiftUI
-- **Data Persistence:** SwiftData
-- **AI Integration:** OpenAI API or similar (cloud-based inference)
-- **Voice Processing:** 
-  - Speech Recognition (Apple Speech Framework)
-  - Text-to-Speech (AVSpeech Synthesis)
+- **UI Framework:** SwiftUI (iOS 17+)
+- **Data Persistence:** SwiftData with file-level encryption
+- **AI Integration:**
+  - **Primary:** Google Gemini Live API (WebSocket, real-time voice)
+  - **Summarisation:** Google Gemini Flash (REST, session notes)
+  - **Fallback:** AIServiceProtocol abstraction supports OpenAI Realtime and local offline mode
+- **Voice Processing:**
+  - AVAudioEngine (24kHz, Linear PCM)
+  - Server-side VAD via Gemini Live
 - **Payments:** StoreKit 2
-- **Security:** CryptoKit for encryption
+- **Security:** Keychain (API keys), SwiftData encryption
+- **Haptics:** CoreHaptics (breathing exercises)
+- **Privacy:** PrivacyInfo.xcprivacy manifest, no tracking
 
 ### 6.3 Architecture Pattern
 - **MVVM (Model-View-ViewModel)**
@@ -316,6 +349,35 @@ Home
 - Regular review of AI responses (anonymized data)
 - User reporting mechanism
 
+### 7.4 System Prompt (Model Instruction)
+Anchor uses a fixed base system instruction applied to every live session, with dynamic personalisation injected at session start.
+
+**Base Prompt:** Defines ROLE & IDENTITY, CAPABILITIES, STRICT LIMITATIONS, CRISIS PROTOCOL, CONVERSATION STYLE, and PRIVACY boundaries. See `AnchorSystemPrompt.swift` for the verbatim text.
+
+**Dynamic Personalisation (injected per-session):**
+The `personalised()` function builds a context block from:
+- User's name and communication style preference (gentle / listener / direct)
+- Primary concerns from onboarding
+- Total session count
+- Recent mood check-in history (last 5 sessions, before → after)
+- Recent session topic summaries (last 10)
+- Crisis detection history count
+- **Cumulative learned UserProfile** built by `ProfileBuilder` across all sessions:
+  - Recurring topics & triggers
+  - Effective coping strategies
+  - Emotional patterns
+  - Communication style notes
+  - Mood baseline
+
+This ensures the AI has relevant context without cloud storage — all profile data lives in on-device SwiftData.
+
+**Key Behaviours:**
+1. **Validate first** — acknowledge and reflect the user's emotions before exploring
+2. **Explore gently** — use open-ended questions to help the user go deeper
+3. **Support with evidence** — suggest coping strategies grounded in CBT, mindfulness, or grounding techniques
+4. **Empower** — help the user identify their own strengths and next steps
+5. **Mirror language** — adapt to the user's vocabulary and tone; avoid clinical jargon unless they use it first
+
 ---
 
 ## 8. Compliance & Legal
@@ -343,10 +405,31 @@ Home
 ## 9. Business Model
 
 ### 9.1 Monetization Strategy
-**Subscription Model:**
-- **Free Trial:** 7 days, full feature access
-- **Monthly Subscription:** $9.99/month
-- **Annual Subscription:** $79.99/year (33% savings)
+**Two-Tier Subscription Model (Professional tier planned for future):**
+
+| | Free | Premium |
+|---|------|--------|
+| **Price** | $0 | $9.99/mo ($79.99/yr) |
+| **Daily usage** | 10 min/day | Unlimited |
+| **Voice conversation** | ✓ | ✓ |
+| **Crisis resources** | ✓ | ✓ |
+| **Mood tracking** | Basic | Full history + trends |
+| **Insights & streaks** | — | ✓ |
+| **Breathing exercises** | — | ✓ |
+| **Learned profile** | — | ✓ |
+| **Data export** | — | JSON |
+
+**Free Trial:** 7 days of Premium, no credit card required.
+
+**Conversion Target:** Free → Premium: 15-20% within 30 days.
+
+**Future Professional Tier** ($19.99/mo / $149.99/yr):
+- PDF session summaries for sharing with therapists
+- Therapist referral directory
+- Priority support
+- Advanced data export
+
+> **Note:** StoreKit 2 integration deferred until Apple Developer account is obtained. Current implementation uses a local trial/subscription flag for development.
 
 ### 9.2 Value Proposition
 - Unlimited conversations
@@ -372,16 +455,27 @@ Home
 ## 10. Go-to-Market Strategy
 
 ### 10.1 Launch Plan
-- **Phase 1 (Weeks 1-4):** Closed beta with 100 users
-- **Phase 2 (Weeks 5-8):** Open beta, collect feedback
-- **Phase 3 (Week 9):** Public launch on App Store
+- **Phase 1 — Closed Beta (Weeks 1-4):**
+  - 100 users via TestFlight, recruited from Reddit r/mentalhealth, r/anxiety
+  - Selection criteria: diverse demographics, mix of therapy-experienced and never-tried
+  - Weekly feedback surveys + in-app feedback button
+  - Focus: safety validation, crisis detection accuracy, conversation quality
+- **Phase 2 — Open Beta (Weeks 5-8):**
+  - Expand to 1,000 users, open TestFlight link
+  - A/B test onboarding flows and conversation starters
+  - Iterate on retention-driving features (insights, streaks, breathing exercises)
+- **Phase 3 — Public Launch (Week 9):**
+  - App Store submission with ASO-optimised listing
+  - Press kit distribution to tech + wellness publications
+  - Launch-week social media campaign
 
 ### 10.2 Marketing Channels
-- **Organic:** App Store optimization (ASO)
-- **Content Marketing:** Blog posts on mental health
-- **Social Media:** Instagram, TikTok (educational content)
-- **Partnerships:** Mental health organizations
-- **PR:** Tech and wellness publications
+- **Organic:** App Store Optimization (keywords: anxiety support, AI therapy, mental health companion)
+- **Content Marketing:** Weekly blog posts (topics: coping strategies, mental health awareness, Anchor use cases)
+- **Social Media:** Instagram (carousel tips), TikTok (60s "Anchor helped me" stories), Twitter/X (mental health threads)
+- **Partnerships:** Mental Health America, NAMI local chapters, university counseling centres
+- **PR:** Launch coverage in TechCrunch, The Verge, Mashable; wellness publications (Healthline, Verywell Mind)
+- **Community:** Reddit AMAs, Discord mental health communities
 
 ### 10.3 User Acquisition
 - **Target CAC:** $5 per user
@@ -423,16 +517,18 @@ Home
 ### 12.1 User Engagement Metrics
 - **Daily Active Users (DAU)**
 - **Monthly Active Users (MAU)**
-- **DAU/MAU Ratio:** Target 30%+
-- **Average Session Duration:** Target 10-15 minutes
-- **Sessions per User per Week:** Target 3+
+- **DAU/MAU Ratio:** Target 30%+ (Wysa benchmark: ~25%, Woebot: ~20%)
+- **Average Session Duration:** Target 10-15 minutes (industry average for AI mental health: 8 min)
+- **Sessions per User per Week:** Target 3+ (Wysa reports ~2.5)
+- **30-Day Retention:** Target 40%+ (mental health app average: 25-30%)
+- **90-Day Retention:** Target 20%+ (industry average: 10-15%)
 
 ### 12.2 Business Metrics
-- **Trial-to-Paid Conversion Rate:** Target 25%
+- **Trial-to-Paid Conversion Rate:** Target 25% (industry average: 10-15%)
 - **Monthly Recurring Revenue (MRR)**
-- **Churn Rate:** Target <5% monthly
-- **Customer Lifetime Value (LTV):** Target $200+
-- **Customer Acquisition Cost (CAC):** Target $5
+- **Churn Rate:** Target <5% monthly (meditation apps: 8-12%)
+- **Customer Lifetime Value (LTV):** Target $200+ (based on 20-month avg lifetime)
+- **Customer Acquisition Cost (CAC):** Target $5 (Calm/Headspace: $30-50; Anchor targets organic-first)
 
 ### 12.3 Product Health Metrics
 - **Crash Rate:** <0.1%
@@ -451,33 +547,46 @@ Home
 
 ### 13.1 MVP (Q1 2026) - Months 1-3
 - [x] Project setup and architecture
-- [ ] Voice conversation interface
-- [ ] AI integration
-- [ ] Local data storage
-- [ ] Crisis detection
-- [ ] Subscription integration
-- [ ] Beta testing
+- [x] Voice conversation interface (Gemini Live WebSocket)
+- [x] AI integration (Gemini Live + Flash summariser)
+- [x] Local data storage (SwiftData with encryption)
+- [x] Crisis detection (keyword + pattern, 988 integration)
+- [x] Safety disclaimer & onboarding flow
+- [x] Session history with summaries
+- [x] Mood tracking (pre/post session)
+- [x] Insights dashboard with streaks
+- [x] Guided breathing exercises (CoreHaptics)
+- [x] Dark mode with adaptive colours
+- [x] Cumulative user profile learning (ProfileBuilder)
+- [x] Data export (JSON with learned profile)
+- [x] Privacy manifest (PrivacyInfo.xcprivacy)
+- [x] Localisation readiness (Localizable.xcstrings)
+- [x] AIServiceProtocol abstraction layer
+- [ ] Accessibility audit (VoiceOver, Dynamic Type, accessibilityHint)
+- [ ] User reporting mechanism for problematic AI responses
+- [ ] In-app help / FAQ screens
+- [ ] Unit & UI test coverage expansion
+
+### 13.2 V1.1 — Post Developer Account
+- [ ] **StoreKit 2 subscription integration**
+- [ ] Restore purchases
+- [ ] Beta testing (TestFlight)
 - [ ] App Store submission
+- [ ] App Store metadata & ASO
 
-### 13.2 V1.1 (Q2 2026) - Months 4-6
-- [ ] Mood tracking
-- [ ] Enhanced insights and trends
-- [ ] Personalization features
-- [ ] Guided breathing exercises
-- [ ] Performance optimization
-
-### 13.3 V1.2 (Q3 2026) - Months 7-9
-- [ ] Spanish language support
+### 13.3 V1.2 (Post-Launch)
+- [ ] Home screen widgets (mood streak, weekly trend, quick check-in, breathing shortcut)
+- [ ] Lock screen widget (streak count + last mood)
 - [ ] Journal feature
-- [ ] Progress milestones
-- [ ] Enhanced crisis resources
-- [ ] Widget support
+- [ ] Enhanced insights and trend visualisations
+- [ ] Spanish language support
+- [ ] Enhanced crisis resources (localised per region)
 
-### 13.4 V2.0 (Q4 2026) - Months 10-12
-- [ ] Android version
+### 13.4 V2.0 (Future)
+- [ ] Professional tier ($19.99/mo) with PDF export & therapist referrals
 - [ ] Additional languages
-- [ ] Professional therapist referrals
-- [ ] Advanced personalization
+- [ ] Advanced personalisation (voice tone adaptation)
+- [ ] Android version
 - [ ] Community resources (carefully moderated)
 
 ---
@@ -487,10 +596,13 @@ Home
 ### 14.1 Technical Risks
 | Risk | Impact | Likelihood | Mitigation |
 |------|--------|------------|------------|
-| AI API downtime | High | Medium | Fallback responses, queue system |
-| Voice recognition accuracy | Medium | Medium | Multiple voice engine options |
-| Data loss | High | Low | Robust backup, encryption |
+| AI API downtime | High | Medium | Text fallback mode; AIServiceProtocol abstraction allows future provider swap |
+| Voice recognition accuracy | Medium | Medium | Text fallback mode, server-side VAD |
+| Data loss | High | Low | SwiftData with encryption, export functionality |
 | Performance issues | Medium | Medium | Optimization, testing |
+| **AI hallucination / harmful response** | **Critical** | **Medium** | **Strict system prompt boundaries, crisis keyword detection, model temperature limits, session summarizer validates output** |
+| **Single-provider dependency (Gemini)** | **High** | **Medium** | **AIServiceProtocol abstraction layer allows drop-in replacement when budget permits; text fallback available offline** |
+| **Model output inappropriate for mental health** | **Critical** | **Low** | **Fixed system prompt with STRICT LIMITATIONS, CRISIS PROTOCOL; prompt tested against adversarial inputs; user reporting mechanism** |
 
 ### 14.2 Business Risks
 | Risk | Impact | Likelihood | Mitigation |
@@ -498,7 +610,9 @@ Home
 | Low conversion rate | High | Medium | Extended trial, better onboarding |
 | High churn | High | Medium | Engagement features, value communication |
 | AI costs exceed projections | Medium | Medium | Cost monitoring, optimization |
-| Competition | Medium | High | Differentiation on privacy, quality |
+| Competition | Medium | High | Differentiation on privacy, voice-first, no gamification |
+| **User claims AI caused harm** | **Critical** | **Low** | **Clear disclaimers at onboarding + settings, session-level safety reminders, legal review of ToS, incident response plan** |
+| **Negative media coverage** | **High** | **Low** | **Proactive transparency blog, safety-first messaging, rapid response protocol** |
 
 ### 14.3 Legal/Compliance Risks
 | Risk | Impact | Likelihood | Mitigation |
@@ -547,6 +661,7 @@ Home
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0 | Feb 7, 2026 | Product Team | Initial PRD creation |
+| 1.1 | Feb 8, 2026 | Product Team | Added competitive landscape, enhanced problem statement, 3-tier monetisation, competitive benchmarks, AI-specific risks, updated tech stack & system prompt to reflect implementation, updated roadmap with completed items |
 
 ---
 

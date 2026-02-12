@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CD56CFDB2F3E0CD600DF23DC /* WhisperKit in Frameworks */ = {isa = PBXBuildFile; productRef = CD56CFDA2F3E0CD600DF23DC /* WhisperKit */; };
+		CD56CFDD2F3E0CD600DF23DC /* whisperkit-cli in Frameworks */ = {isa = PBXBuildFile; productRef = CD56CFDC2F3E0CD600DF23DC /* whisperkit-cli */; };
+		CD758A342F387122006942D7 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD758A332F387122006942D7 /* WidgetKit.framework */; };
+		CD758A362F387122006942D7 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD758A352F387122006942D7 /* SwiftUI.framework */; };
+		CD758A452F387126006942D7 /* AnchorWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CD758A312F387122006942D7 /* AnchorWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CD7586D72F36DF1D006942D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,17 +29,61 @@
 			remoteGlobalIDString = CD7586C62F36DF1A006942D7;
 			remoteInfo = Anchor;
 		};
+		CD758A432F387126006942D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CD7586BF2F36DF1A006942D7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CD758A302F387122006942D7;
+			remoteInfo = AnchorWidgetsExtension;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CD758A4A2F387126006942D7 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CD758A452F387126006942D7 /* AnchorWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		CD7586C72F36DF1A006942D7 /* Anchor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Anchor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD7586D62F36DF1D006942D7 /* AnchorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnchorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD7586E02F36DF1D006942D7 /* AnchorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AnchorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD758A312F387122006942D7 /* AnchorWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AnchorWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD758A332F387122006942D7 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		CD758A352F387122006942D7 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CD7588942F373375006942D7 /* Exceptions for "Anchor" folder in "Anchor" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CD7586C62F36DF1A006942D7 /* Anchor */;
+		};
+		CD758A492F387126006942D7 /* Exceptions for "AnchorWidgets" folder in "AnchorWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CD758A302F387122006942D7 /* AnchorWidgetsExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CD7586C92F36DF1A006942D7 /* Anchor */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CD7588942F373375006942D7 /* Exceptions for "Anchor" folder in "Anchor" target */,
+			);
 			path = Anchor;
 			sourceTree = "<group>";
 		};
@@ -45,6 +97,19 @@
 			path = AnchorUITests;
 			sourceTree = "<group>";
 		};
+		CD758A372F387122006942D7 /* AnchorWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CD758A492F387126006942D7 /* Exceptions for "AnchorWidgets" folder in "AnchorWidgetsExtension" target */,
+			);
+			path = AnchorWidgets;
+			sourceTree = "<group>";
+		};
+		CD9F1B6B2F9F1F5A006942D7 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +117,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD56CFDB2F3E0CD600DF23DC /* WhisperKit in Frameworks */,
+				CD56CFDD2F3E0CD600DF23DC /* whisperkit-cli in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +136,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CD758A2E2F387122006942D7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD758A362F387122006942D7 /* SwiftUI.framework in Frameworks */,
+				CD758A342F387122006942D7 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -78,6 +154,9 @@
 				CD7586C92F36DF1A006942D7 /* Anchor */,
 				CD7586D92F36DF1D006942D7 /* AnchorTests */,
 				CD7586E32F36DF1D006942D7 /* AnchorUITests */,
+				CD758A372F387122006942D7 /* AnchorWidgets */,
+				CD9F1B6B2F9F1F5A006942D7 /* Shared */,
+				CD758A322F387122006942D7 /* Frameworks */,
 				CD7586C82F36DF1A006942D7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,8 +167,18 @@
 				CD7586C72F36DF1A006942D7 /* Anchor.app */,
 				CD7586D62F36DF1D006942D7 /* AnchorTests.xctest */,
 				CD7586E02F36DF1D006942D7 /* AnchorUITests.xctest */,
+				CD758A312F387122006942D7 /* AnchorWidgetsExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		CD758A322F387122006942D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CD758A332F387122006942D7 /* WidgetKit.framework */,
+				CD758A352F387122006942D7 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -102,16 +191,21 @@
 				CD7586C32F36DF1A006942D7 /* Sources */,
 				CD7586C42F36DF1A006942D7 /* Frameworks */,
 				CD7586C52F36DF1A006942D7 /* Resources */,
+				CD758A4A2F387126006942D7 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CD758A442F387126006942D7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				CD7586C92F36DF1A006942D7 /* Anchor */,
+				CD9F1B6B2F9F1F5A006942D7 /* Shared */,
 			);
 			name = Anchor;
 			packageProductDependencies = (
+				CD56CFDA2F3E0CD600DF23DC /* WhisperKit */,
+				CD56CFDC2F3E0CD600DF23DC /* whisperkit-cli */,
 			);
 			productName = Anchor;
 			productReference = CD7586C72F36DF1A006942D7 /* Anchor.app */;
@@ -163,6 +257,29 @@
 			productReference = CD7586E02F36DF1D006942D7 /* AnchorUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		CD758A302F387122006942D7 /* AnchorWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CD758A462F387126006942D7 /* Build configuration list for PBXNativeTarget "AnchorWidgetsExtension" */;
+			buildPhases = (
+				CD758A2D2F387122006942D7 /* Sources */,
+				CD758A2E2F387122006942D7 /* Frameworks */,
+				CD758A2F2F387122006942D7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				CD758A372F387122006942D7 /* AnchorWidgets */,
+				CD9F1B6B2F9F1F5A006942D7 /* Shared */,
+			);
+			name = AnchorWidgetsExtension;
+			packageProductDependencies = (
+			);
+			productName = AnchorWidgetsExtension;
+			productReference = CD758A312F387122006942D7 /* AnchorWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -184,6 +301,9 @@
 						CreatedOnToolsVersion = 26.2;
 						TestTargetID = CD7586C62F36DF1A006942D7;
 					};
+					CD758A302F387122006942D7 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 				};
 			};
 			buildConfigurationList = CD7586C22F36DF1A006942D7 /* Build configuration list for PBXProject "Anchor" */;
@@ -195,6 +315,9 @@
 			);
 			mainGroup = CD7586BE2F36DF1A006942D7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CD56CFD92F3E0CD600DF23DC /* XCRemoteSwiftPackageReference "WhisperKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CD7586C82F36DF1A006942D7 /* Products */;
 			projectDirPath = "";
@@ -203,6 +326,7 @@
 				CD7586C62F36DF1A006942D7 /* Anchor */,
 				CD7586D52F36DF1D006942D7 /* AnchorTests */,
 				CD7586DF2F36DF1D006942D7 /* AnchorUITests */,
+				CD758A302F387122006942D7 /* AnchorWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +347,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		CD7586DE2F36DF1D006942D7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD758A2F2F387122006942D7 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +384,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CD758A2D2F387122006942D7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +403,11 @@
 			isa = PBXTargetDependency;
 			target = CD7586C62F36DF1A006942D7 /* Anchor */;
 			targetProxy = CD7586E12F36DF1D006942D7 /* PBXContainerItemProxy */;
+		};
+		CD758A442F387126006942D7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CD758A302F387122006942D7 /* AnchorWidgetsExtension */;
+			targetProxy = CD758A432F387126006942D7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -395,11 +538,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Anchor/Anchor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 62H7K6JQN2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Anchor/Info.plist;
+				INFOPLIST_KEY_GEMINI_LIVE_MODEL = "gemini-2.5-flash-native-audio-preview-12-2025";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Anchor uses the microphone to support real-time voice conversations.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Anchor uses the microphone for live voice conversations.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_THROUGHLINE_API_BASE_URL = "https://api.throughlinecare.com/v1";
+				INFOPLIST_KEY_THROUGHLINE_API_TOKEN = "";
+				INFOPLIST_KEY_UIAppFonts = "PlayfairDisplay-VariableFont_wght.ttf PlayfairDisplay-Italic-VariableFont_wght.ttf SourceSans3-VariableFont_wght.ttf SourceSans3-Italic-VariableFont_wght.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -427,11 +579,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Anchor/Anchor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 62H7K6JQN2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Anchor/Info.plist;
+				INFOPLIST_KEY_GEMINI_LIVE_MODEL = "gemini-2.5-flash-native-audio-preview-12-2025";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Anchor uses the microphone to support real-time voice conversations.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Anchor uses the microphone for live voice conversations.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_THROUGHLINE_API_BASE_URL = "https://api.throughlinecare.com/v1";
+				INFOPLIST_KEY_THROUGHLINE_API_TOKEN = "";
+				INFOPLIST_KEY_UIAppFonts = "PlayfairDisplay-VariableFont_wght.ttf PlayfairDisplay-Italic-VariableFont_wght.ttf SourceSans3-VariableFont_wght.ttf SourceSans3-Italic-VariableFont_wght.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -538,6 +699,66 @@
 			};
 			name = Release;
 		};
+		CD758A472F387126006942D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 62H7K6JQN2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AnchorWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AnchorWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Sensh.Anchor.AnchorWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CD758A482F387126006942D7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 62H7K6JQN2;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AnchorWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AnchorWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Sensh.Anchor.AnchorWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -577,7 +798,40 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		CD758A462F387126006942D7 /* Build configuration list for PBXNativeTarget "AnchorWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD758A472F387126006942D7 /* Debug */,
+				CD758A482F387126006942D7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CD56CFD92F3E0CD600DF23DC /* XCRemoteSwiftPackageReference "WhisperKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/argmaxinc/WhisperKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CD56CFDA2F3E0CD600DF23DC /* WhisperKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CD56CFD92F3E0CD600DF23DC /* XCRemoteSwiftPackageReference "WhisperKit" */;
+			productName = WhisperKit;
+		};
+		CD56CFDC2F3E0CD600DF23DC /* whisperkit-cli */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CD56CFD92F3E0CD600DF23DC /* XCRemoteSwiftPackageReference "WhisperKit" */;
+			productName = "whisperkit-cli";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CD7586BF2F36DF1A006942D7 /* Project object */;
 }

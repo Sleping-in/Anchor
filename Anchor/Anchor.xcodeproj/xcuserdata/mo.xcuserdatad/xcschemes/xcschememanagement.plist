@@ -9,6 +9,29 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>AnchorWidgetsExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>CD7586C62F36DF1A006942D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CD7586D52F36DF1D006942D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CD7586DF2F36DF1D006942D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 	</dict>
 </dict>
 </plist>

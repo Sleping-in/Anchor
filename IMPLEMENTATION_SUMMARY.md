@@ -1,289 +1,98 @@
-# Implementation Summary - Anchor MVP
+# Implementation Summary - Anchor
+
+**Last Updated:** February 12, 2026 (WhisperKit added)  
+**Status:** Feature-complete for MVP + V1.1/V1.2 additions (StoreKit deferred)
 
 ## Overview
-Successfully implemented the core MVP for Anchor, an AI-powered emotional support mobile app for iOS, based on the comprehensive PRD and user requirements.
+Anchor is a voice-first emotional support app with local-only data storage, crisis safety, and session insights. The app now includes live voice conversations, summaries, breathing exercises, smart reminders, live activity, app lock, and expanded history/insights.
 
-## What Was Implemented
+## Core Features Implemented
 
-### 1. Documentation (3 files)
-- **PRD.md**: Complete 17-section Product Requirements Document (17KB)
-  - Product goals, features, technical architecture
-  - Safety and ethical considerations
-  - Business model and roadmap
-  - Success metrics and risks
-  
-- **README.md**: Professional project documentation (8KB)
-  - Project overview and features
-  - Technical stack and architecture
-  - Installation instructions
-  - Privacy and safety information
-  - Roadmap and contact details
-  
-- **.gitignore**: iOS/Swift development environment
-  - Xcode build artifacts
-  - CocoaPods, Carthage, SPM
-  - Sensitive files (API keys, secrets)
+### Voice Conversations (MVP)
+- Real-time Gemini Live voice sessions with streaming transcription and audio output.
+- Voice activity detection + silence end-of-turn.
+- Session pause/resume, interruption handling, and background/foreground reconnection.
 
-### 2. Core Data Models (2 models)
-- **Session.swift**: Conversation session tracking
-  - Timestamp, duration, summary
-  - Mood tracking (before/after)
-  - Crisis detection flag
-  - Completion status
-  - Formatted duration helper
-  
-- **UserSettings.swift**: User preferences and subscription
-  - Onboarding and disclaimer status
-  - Voice speed and notification preferences
-  - Trial period tracking (7-day free trial)
-  - Subscription status and expiry
-  - Active access validation logic
+### Safety & Crisis (MVP)
+- Crisis keyword detection with safety disclaimers and localized emergency resources.
+- Emergency resources view and quick SOS access from Home.
 
-### 3. User Interface (10+ views)
-- **HomeView.swift**: Main landing screen
-  - Welcome message and branding
-  - Large "Start Conversation" button
-  - Recent sessions preview
-  - Trial/subscription status
-  - Navigation to History and Settings
-  
-- **ConversationView.swift**: Voice conversation interface
-  - Recording controls (start/pause/end)
-  - Visual feedback with animations
-  - Elapsed time display
-  - Message bubbles for transcript
-  - Emergency help button
-  
-- **SafetyDisclaimerView.swift**: Critical safety information
-  - Professional care disclaimer
-  - Emergency resources (988, 741741, 911)
-  - Privacy commitment
-  - Age restriction (18+)
-  - User acknowledgment and acceptance
-  
-- **HistoryView.swift**: Session tracking and insights
-  - Chronological session list
-  - Session details (date, duration, mood)
-  - Crisis indicators
-  - Individual session deletion
-  - Data export option
-  - Session detail modal with summary
-  
-- **SettingsView.swift**: User preferences
-  - Subscription management
-  - Voice speed slider
-  - Notification toggle
-  - Privacy and data controls
-  - Safety resources access
-  - About and support links
-  
-- **SubscriptionView.swift**: Monetization
-  - Free 7-day trial offer
-  - Monthly ($9.99) and Annual ($79.99) plans
-  - Feature list and benefits
-  - Plan comparison
-  - Subscribe button with trial start
-  
-- **EmergencyResourcesView.swift**: Crisis support
-  - Immediate crisis contacts (988, 741741, 911)
-  - Additional support lines (SAMHSA, Veterans, LGBTQ+)
-  - Direct call/text integration
-  - International resources link
-  - Clear, accessible layout
-  
-- **SupportViews.swift**: Legal and informational
-  - Privacy Policy
-  - Terms of Service
-  - Safety Guidelines
-  - About Anchor
+### Local Data & Privacy (MVP)
+- SwiftData local-only storage with file protection.
+- Export all data to JSON and delete individual/all sessions.
+- No cloud sync.
 
-### 4. App Structure Updates
-- **AnchorApp.swift**: Updated app entry point
-  - SwiftData model container for Session and UserSettings
-  - Local storage configuration
-  
-- **ContentView.swift**: Main content wrapper
-  - Routes to HomeView
-  - Model container injection
+### Onboarding & Consent (MVP)
+- Guided onboarding with safety acknowledgment, preferences, and now optional Face ID app lock.
 
-### 5. Testing (10 tests)
-- **AnchorTests.swift**: Unit tests (5 tests)
-  - Session model creation and validation
-  - Duration formatting
-  - UserSettings initialization
-  - Trial period tracking logic
-  - Subscription status validation
-  
-- **AnchorUITests.swift**: UI tests (5 tests)
-  - App launch verification
-  - Start conversation button
-  - Settings navigation
-  - History navigation
-  - Launch performance measurement
+### History & Insights (MVP+)
+- Session list with summaries, mood shifts, tags, and crisis indicators.
+- History highlights card (sessions, streak, avg shift, top topics/triggers).
+- Session sharing (summary text + shareable card).
+- Insights dashboard: weekly stats, comparisons, mood heatmap, streaks, voice stress trends.
 
-## Key Features Delivered
+### Mood & Focus (V1.1)
+- Post-session mood check-in with emoji scale.
+- Mood triggers tagging.
+- Session focus and conversation personas.
 
-### Privacy-First Architecture ✅
-- Local-only data storage with SwiftData
-- No cloud backup of conversations
-- End-to-end encryption ready
-- User control over data (export/delete)
+### Breathing & Anchor Moments (V1.1/V1.2)
+- Multiple breathing patterns (box, 4-7-8, physiological sigh).
+- Selection UI + guided exercise.
+- Anchor Moments scheduled micro-interactions with ambient audio.
 
-### Safety Features ✅
-- Comprehensive safety disclaimer on first use
-- Crisis keyword detection framework
-- Emergency resources (988, 741741, 911)
-- Clear professional boundaries
-- Age restriction enforcement (18+)
+### Smart Reminders (V1.1)
+- Check-in time estimator + notification scheduling with optional override.
 
-### User Experience ✅
-- Clean, minimal SwiftUI interface
-- Large, accessible buttons
-- Clear visual hierarchy
-- Smooth navigation
-- Intuitive information architecture
+### Live Activity (V1.2)
+- Live Activity with time elapsed, orb status, focus badge, and deep links.
+- End-session action from Live Activity.
 
-### Business Model ✅
-- 7-day free trial (no credit card)
-- Subscription management UI
-- Monthly and annual plans
-- Clear pricing display
-- Easy cancellation
+### App Lock (V1.2)
+- Optional Face ID / passcode gate on app return.
+- Settings + onboarding toggle.
 
-### Complete User Flows ✅
-1. Onboarding → Safety Disclaimer → Home
-2. Start Conversation → Recording Interface
-3. View History → Session Details
-4. Manage Settings → Privacy Controls
-5. Subscribe → Trial Activation
+## STT Enhancements & Transcript Stability
+- **Adaptive barge-in threshold** calibrated from ambient noise floor
+- **4-stage audio preprocessing** (high-pass filter, noise gate, AGC, limiter)
+- **150+ term domain vocabulary** with post-processing corrections
+- **Echo suppression framework** (playback gating + spectral tracking)
+- **STTDiagnostics** for real-time quality monitoring
+- **Transcript merging fix** - 2-second grace period prevents long utterances from splitting when server `turnComplete` arrives before local STT finishes finalizing
+- **STT restart detection** - Automatically appends new utterances to previous message when STT hits internal limits
+- **Duplicate transcript filtering** - Skips processing identical text to prevent UI spam and "multiple updates per frame" warnings
+- **Debounced clear timer** - Prevents duplicate scheduling of message ID cleanup
+- **WhisperKit integration** - OpenAI Whisper-based on-device transcription with configurable model sizes (tiny/base/small/medium/large)
 
-## Technical Highlights
+## Architecture & Data Models
+**Models:** Session, UserSettings, UserProfile, CrisisResources, ConversationMessage, FlaggedResponse, BookmarkedInsight, SessionFocus, ConversationPersona.  
+**Services:** GeminiLiveClient, LiveAudioIO, CrisisKeywordScanner, CrisisResourceStore, ThroughLineAPIClient, SessionSummarizer, ProfileBuilder, DataExporter, NotificationManager, VoiceStressTracker (CoreML-ready), WeeklySummaryBuilder, CheckInTimeEstimator, DeepLinkRouter, WidgetDataSync.
 
-### Architecture
-- **Pattern**: MVVM with SwiftUI
-- **Storage**: SwiftData (local, encrypted)
-- **UI**: Declarative SwiftUI
-- **Navigation**: NavigationStack
-- **State Management**: @State, @Query, @Environment
+## Design System
+- AnchorTheme with custom typography, colors, and motion.
+- OrbView + VoiceStateController for presence feedback.
 
-### Code Quality
-- Clear file organization (Models/, Views/)
-- Consistent naming conventions
-- Comprehensive inline documentation
-- Preview support for all views
-- Type safety with Swift
+## Backend Infrastructure
+- **Primary AI Provider**: Google Gemini API (AI Studio)
+- **Fallback AI Provider**: Google Vertex AI API (activated on 429 rate limits)
+- **Summary Model**: gemini-2.5-flash (configurable via GEMINI_SUMMARY_MODEL env var)
+- **Rate Limiting**: Request deduplication + exponential backoff with automatic fallback
 
-### Scalability
-- Modular view structure
-- Reusable components
-- Extensible data models
-- Clean separation of concerns
+## Tests
+- Unit tests: 72
+- UI tests: 9
+- All tests passing on physical device (mohammad’s iPhone).
 
-## What's Ready for Next Phase
+## Gap Audit (Non-StoreKit)
+The following are still needed to fully align with PRD and launch readiness:
+1. **Localization coverage**  
+   Many UI strings are still literal and not yet in `Localizable.xcstrings`.  
+2. **Accessibility audit**  
+   Full VoiceOver, Dynamic Type, and contrast pass still needed.
+3. **App Store readiness**  
+   Confirm privacy manifest coverage and required reasons; finalize metadata/screenshots.
+4. **Optional CoreML voice stress model**  
+   The pipeline is wired but needs a bundled model to enable ML scoring.
 
-### Implemented ✅
-- Complete UI/UX for MVP
-- Data persistence layer
-- Safety and privacy framework
-- Subscription UI
-- Testing infrastructure
-
-### Ready to Integrate 🔌
-- Voice recording (Speech framework)
-- AI conversation API
-- Crisis detection algorithm
-- StoreKit subscriptions
-- Push notifications
-- Data export functionality
-
-## Metrics
-
-### Lines of Code
-- **Swift Code**: ~13 files, ~15,000+ lines
-- **Documentation**: ~25,000 characters
-- **Tests**: 10 test cases
-
-### Features
-- **Views**: 10+ SwiftUI views
-- **Models**: 2 SwiftData models
-- **Tests**: 5 unit + 5 UI tests
-- **Documentation**: PRD + README
-
-### Coverage
-- **UI**: All core screens implemented
-- **Navigation**: Complete flow
-- **Data**: Full model layer
-- **Safety**: All critical features
-
-## Compliance & Ethics
-
-### Privacy ✅
-- GDPR-ready design
-- Local-only storage
-- User data rights (access, export, delete)
-- No third-party tracking
-- Transparent data practices
-
-### Safety ✅
-- Crisis detection framework
-- Emergency resources
-- Professional disclaimers
-- Age restrictions
-- Ethical AI guidelines
-
-### Legal ✅
-- Terms of Service
-- Privacy Policy
-- Safety Guidelines
-- Age verification
-- Liability disclaimers
-
-## Next Steps (Post-MVP)
-
-### Phase 3: Feature Implementation
-1. Integrate voice recording (Speech framework)
-2. Connect AI conversation API
-3. Implement crisis detection algorithm
-4. Add StoreKit subscription handling
-5. Enable data export (JSON/CSV)
-6. Add push notifications
-
-### Phase 4: Testing & Launch
-1. Manual UI/UX testing
-2. Beta testing with users
-3. Performance optimization
-4. App Store preparation
-5. Marketing materials
-6. Launch strategy execution
-
-## Success Criteria Met ✅
-
-- [x] Comprehensive PRD created
-- [x] Privacy-first architecture implemented
-- [x] Safety features included
-- [x] Complete UI for core flows
-- [x] Subscription model UI
-- [x] Local data storage
-- [x] Testing infrastructure
-- [x] Professional documentation
-
-## Conclusion
-
-The Anchor MVP implementation is **complete and ready for the next phase**. All core requirements from the PRD have been addressed:
-
-1. ✅ Product documentation (PRD, README)
-2. ✅ Privacy-first architecture
-3. ✅ Safety and ethical features
-4. ✅ Complete user interface
-5. ✅ Subscription model
-6. ✅ Data persistence
-7. ✅ Testing coverage
-8. ✅ Professional polish
-
-The codebase is clean, well-organized, and ready for feature integration (voice, AI, payments). All foundations are in place for a successful MVP launch.
-
----
-
-**Implementation Date**: February 7, 2026  
-**Status**: ✅ MVP Core Complete  
-**Next Milestone**: Feature Integration & Beta Testing
+## Deferred (Intentional)
+- **StoreKit 2 billing & receipts** (awaiting Apple Developer account).
