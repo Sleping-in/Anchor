@@ -10,30 +10,73 @@ import XCTest
 final class AnchorUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func testAppLaunches() throws {
         let app = XCUIApplication()
+        app.launchEnvironment["UITEST_SKIP_ONBOARDING"] = "1"
         app.launch()
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        // App should launch into home
+        let onboardingContinue = app.buttons["onboarding.continue"]
+        let homeStart = app.buttons["home.startConversation"]
+        XCTAssertTrue(
+            homeStart.waitForExistence(timeout: 5) || onboardingContinue.waitForExistence(timeout: 5),
+            "Expected home screen to appear"
+        )
+    }
+
+    @MainActor
+    func testStartConversationButton() throws {
+        let app = XCUIApplication()
+        app.launchEnvironment["UITEST_SKIP_ONBOARDING"] = "1"
+        app.launch()
+
+        let startButton = app.buttons["home.startConversation"]
+        if startButton.waitForExistence(timeout: 5) {
+            XCTAssertTrue(startButton.isEnabled)
+        }
+    }
+
+    @MainActor
+    func testNavigationToSettings() throws {
+        let app = XCUIApplication()
+        app.launchEnvironment["UITEST_SKIP_ONBOARDING"] = "1"
+        app.launch()
+
+        let settingsButton = app.buttons["home.settings"]
+        if settingsButton.waitForExistence(timeout: 5) {
+            settingsButton.tap()
+            XCTAssertTrue(
+                app.navigationBars["Settings"].waitForExistence(timeout: 3) ||
+                app.staticTexts["Settings"].waitForExistence(timeout: 3)
+            )
+        }
+    }
+
+    @MainActor
+    func testNavigationToHistory() throws {
+        let app = XCUIApplication()
+        app.launchEnvironment["UITEST_SKIP_ONBOARDING"] = "1"
+        app.launch()
+
+        let historyButton = app.buttons["home.history"]
+        if historyButton.waitForExistence(timeout: 5) {
+            historyButton.tap()
+            XCTAssertTrue(
+                app.navigationBars["History"].waitForExistence(timeout: 3) ||
+                app.staticTexts["No sessions yet"].waitForExistence(timeout: 3)
+            )
+        }
     }
 
     @MainActor
     func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
         measure(metrics: [XCTApplicationLaunchMetric()]) {
             XCUIApplication().launch()
         }

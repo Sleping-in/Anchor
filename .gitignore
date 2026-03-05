@@ -1,0 +1,74 @@
+# Xcode
+.DS_Store
+*.xcuserstate
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
+/*.gcno
+**/xcshareddata/WorkspaceSettings.xcsettings
+
+# Xcode - build folder
+build/
+DerivedData/
+
+# Xcode - User settings
+xcuserdata/
+
+# CocoaPods
+Pods/
+*.podspec
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+Carthage/Checkouts/
+
+# Swift Package Manager
+.swiftpm/
+.build/
+*.swiftpm
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code coverage
+*.gcda
+*.gcno
+
+# Provisioning profiles
+*.mobileprovision
+*.provisionprofile
+
+# Certificates
+*.cer
+*.p12
+
+# Temporary files
+*~
+.*.swp
+
+# Archives
+*.xcarchive
+
+# IDEs
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# API Keys (ensure these are never committed)
+**/APIKeys.swift
+**/Secrets.swift
+**/Config.swift
+
+# Documentation generated files
+docs/
+
+# Backup files
+*.bak
+*.backup
