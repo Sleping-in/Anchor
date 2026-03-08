@@ -567,12 +567,15 @@ enum SessionSummarizer {
         }
         
         let summaryModel = loadSummaryModel()
-        let url = URL(
-            string: "https://generativelanguage.googleapis.com/v1beta/\(summaryModel):generateContent?key=\(apiKey)"
-        )!
+        guard let url = URL(
+            string: "https://generativelanguage.googleapis.com/v1beta/\(summaryModel):generateContent"
+        ) else {
+            return .failure(.invalidRequest("Invalid Gemini API URL."))
+        }
 
         return await executeGeminiRequest(
             url: url,
+            apiKey: apiKey,
             prompt: prompt,
             promptVersion: promptVersion
         )
@@ -591,12 +594,15 @@ enum SessionSummarizer {
         }
         
         let modelName = config.modelName ?? "gemini-2.5-flash"
-        let url = URL(
-            string: "https://\(config.location)-aiplatform.googleapis.com/v1/projects/\(config.projectId)/locations/\(config.location)/publishers/google/models/\(modelName):generateContent?key=\(apiKey)"
-        )!
+        guard let url = URL(
+            string: "https://\(config.location)-aiplatform.googleapis.com/v1/projects/\(config.projectId)/locations/\(config.location)/publishers/google/models/\(modelName):generateContent"
+        ) else {
+            return .failure(.invalidRequest("Invalid Vertex AI URL."))
+        }
         
         return await executeVertexRequest(
             url: url,
+            apiKey: apiKey,
             prompt: prompt,
             promptVersion: promptVersion
         )
@@ -605,6 +611,7 @@ enum SessionSummarizer {
     /// Execute Gemini API request (no role field needed)
     private static func executeGeminiRequest(
         url: URL,
+        apiKey: String,
         prompt: String,
         promptVersion: SummaryPromptVersion
     ) async -> SummaryResult {
@@ -625,6 +632,7 @@ enum SessionSummarizer {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
         request.httpBody = jsonData
 
         do {
@@ -658,6 +666,7 @@ enum SessionSummarizer {
     /// Execute Vertex AI API request (requires role field)
     private static func executeVertexRequest(
         url: URL,
+        apiKey: String,
         prompt: String,
         promptVersion: SummaryPromptVersion
     ) async -> SummaryResult {
@@ -681,6 +690,7 @@ enum SessionSummarizer {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
         request.httpBody = jsonData
 
         do {
@@ -1427,11 +1437,11 @@ enum SessionSummarizer {
         let env = ProcessInfo.processInfo.environment
         
         return VertexAIConfig(
-            projectId: env["VERTEX_AI_PROJECT_ID"] ?? info["VERTEX_AI_PROJECT_ID"] as? String ?? "gen-lang-client-0481856273",
+            projectId: env["VERTEX_AI_PROJECT_ID"] ?? info["VERTEX_AI_PROJECT_ID"] as? String ?? "",
             location: env["VERTEX_AI_LOCATION"] ?? info["VERTEX_AI_LOCATION"] as? String ?? "us-central1",
             modelName: env["VERTEX_AI_MODEL"] ?? info["VERTEX_AI_MODEL"] as? String,
             serviceAccountKeyPath: env["VERTEX_AI_KEY_PATH"] ?? info["VERTEX_AI_KEY_PATH"] as? String,
-            apiKey: env["VERTEX_AI_API_KEY"] ?? info["VERTEX_AI_API_KEY"] as? String ?? "AQ.Ab8RN6ID9JKl0SDpm_Cxp0g0ucZy0bLNALpeLoytJbKrESxCtQ"
+            apiKey: env["VERTEX_AI_API_KEY"] ?? info["VERTEX_AI_API_KEY"] as? String
         )
     }
     
@@ -1462,9 +1472,11 @@ enum SessionSummarizer {
     
     /// Fetch token from GCP metadata server (works when running on GCP or with gcloud auth)
     private static func fetchMetadataToken() async -> String? {
-        let url = URL(string: "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token")!
+        guard let url = URL(string: "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token") else {
+            return nil
+        }
         var request = URLRequest(url: url)
-        request.setValue("Google-Metadata-Request: True", forHTTPHeaderField: "Metadata-Flavor")
+        request.setValue("Google", forHTTPHeaderField: "Metadata-Flavor")
         
         do {
             let (data, _) = try await URLSession.shared.data(for: request)
@@ -1490,17 +1502,20 @@ enum SessionSummarizer {
             print("  Project ID: \(config.projectId)")
             print("  Location: \(config.location)")
             print("  Model: \(config.modelName ?? "gemini-2.5-flash")")
-            print("  API Key: \(config.apiKey?.prefix(10) ?? "nil")...")
+            print("  API Key: \(config.apiKey != nil ? "<configured>" : "nil")")
             
-            guard config.isConfigured else {
-                print("  ❌ FAILED: Vertex AI not configured")
+            guard config.isConfigured, let apiKey = config.apiKey, !apiKey.isEmpty else {
+                print("  ❌ FAILED: Vertex AI not configured or missing API key")
                 return
             }
             
             let modelName = config.modelName ?? "gemini-2.5-flash"
-            let url = URL(
-                string: "https://\(config.location)-aiplatform.googleapis.com/v1/projects/\(config.projectId)/locations/\(config.location)/publishers/google/models/\(modelName):generateContent?key=\(config.apiKey ?? "")"
-            )!
+            guard let url = URL(
+                string: "https://\(config.location)-aiplatform.googleapis.com/v1/projects/\(config.projectId)/locations/\(config.location)/publishers/google/models/\(modelName):generateContent"
+            ) else {
+                print("  ❌ FAILED: Invalid Vertex AI URL")
+                return
+            }
             
             print("  URL: \(url.absoluteString)")
             
@@ -1522,6 +1537,7 @@ enum SessionSummarizer {
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
             request.httpBody = jsonData
             
             do {
